@@ -67,16 +67,12 @@ struct AACButtonView: View {
 
     @ViewBuilder
     private var builtInImage: some View {
-        switch item.id {
-        case "milk":
-            MilkCartonView()
-        case "time-to-go":
-            StrollerView()
-        case "brush-teeth":
-            ElectricToothbrushView()
-        case "potty":
-            PottyView()
-        default:
+        if let uiImage = UIImage(named: item.id) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFit()
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+        } else {
             Image(systemName: "questionmark.circle")
                 .resizable()
                 .scaledToFit()
