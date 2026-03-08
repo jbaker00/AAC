@@ -1,0 +1,30 @@
+name: AAC
+options:
+  bundleIdPrefix: com.jbaker
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: G3P9A8Z2NP
+    TARGETED_DEVICE_FAMILY: "2"
+    SUPPORTS_XR_DESIGNED_FOR: "NO"
+    INFOPLIST_FILE: AAC/Info.plist
+
+targets:
+  AAC:
+    type: application
+    platform: iOS
+    sources:
+      - AAC
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jbaker.AAC
+        INFOPLIST_FILE: AAC/Info.plist
+        TARGETED_DEVICE_FAMILY: "2"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: G3P9A8Z2NP
+        SWIFT_VERSION: "5.9"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
