@@ -72,18 +72,16 @@ struct EditItemView: View {
                     }
                     .padding(.vertical, 8)
 
-                    if !item.isBuiltIn {
-                        PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                            HStack {
-                                Image(systemName: "photo.on.rectangle.angled")
-                                Text("Change Picture")
-                            }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .font(.title3)
+                    PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                        HStack {
+                            Image(systemName: "photo.on.rectangle.angled")
+                            Text(item.isBuiltIn && selectedImage == nil ? "Replace with Photo" : "Change Picture")
                         }
-                        .onChange(of: selectedPhoto) { newValue in
-                            loadImage(from: newValue)
-                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .font(.title3)
+                    }
+                    .onChange(of: selectedPhoto) { newValue in
+                        loadImage(from: newValue)
                     }
                 }
 
@@ -166,19 +164,21 @@ struct EditItemView: View {
     }
 
     private func saveItem() {
+        // If user picked a new photo (even for built-in items), convert to custom
+        let hasNewImage = (selectedImage != nil && selectedImage != existingImage)
+        let shouldConvertToCustom = item.isBuiltIn && hasNewImage
+        
         let updatedItem = AACItem(
             id: item.id,
             label: label,
             speechText: speechText.isEmpty ? label : speechText,
             backgroundColorHex: backgroundColor.hexString,
             borderColorHex: borderColor.hexString,
-            customImageName: item.customImageName,
-            isBuiltIn: item.isBuiltIn
+            customImageName: shouldConvertToCustom ? "\(item.id).jpg" : item.customImageName,
+            isBuiltIn: shouldConvertToCustom ? false : item.isBuiltIn
         )
 
-        // If user picked a new image for a non-built-in item
-        let newImage = (selectedImage != existingImage) ? selectedImage : nil
-
+        let newImage = hasNewImage ? selectedImage : nil
         itemStore.updateItem(updatedItem, newImage: newImage)
         dismiss()
     }

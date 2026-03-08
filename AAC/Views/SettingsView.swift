@@ -2,7 +2,13 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var ttsManager: TextToSpeechManager
+    @ObservedObject var settings: TTSSettings
     @Environment(\.dismiss) private var dismiss
+
+    init(ttsManager: TextToSpeechManager) {
+        self.ttsManager = ttsManager
+        self.settings = ttsManager.settings
+    }
 
     var body: some View {
         NavigationStack {
@@ -14,9 +20,9 @@ struct SettingsView: View {
                             Text("Currently Using")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                            Text("\(ttsManager.settings.provider.displayName)")
+                            Text(settings.provider.displayName)
                                 .font(.title2.bold())
-                            Text(ttsManager.settings.currentVoiceDisplayName)
+                            Text(settings.currentVoiceDisplayName)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -32,7 +38,7 @@ struct SettingsView: View {
                 Section("Voice Provider") {
                     ForEach(TTSProvider.allCases, id: \.self) { provider in
                         Button {
-                            ttsManager.settings.provider = provider
+                            settings.provider = provider
                             ttsManager.clearCache()
                         } label: {
                             HStack {
@@ -45,7 +51,7 @@ struct SettingsView: View {
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                if ttsManager.settings.provider == provider {
+                                if settings.provider == provider {
                                     Image(systemName: "checkmark.circle.fill")
                                         .font(.title2)
                                         .foregroundColor(.accentColor)
@@ -61,9 +67,9 @@ struct SettingsView: View {
                 }
 
                 // MARK: - Voice Selection
-                Section("Choose Voice for \(ttsManager.settings.provider.displayName)") {
-                    let voices = ttsManager.settings.provider.voices
-                    let selectedId = ttsManager.settings.currentVoiceId
+                Section("Choose Voice for \(settings.provider.displayName)") {
+                    let voices = settings.provider.voices
+                    let selectedId = settings.currentVoiceId
 
                     ForEach(voices, id: \.id) { voice in
                         Button {
@@ -85,12 +91,12 @@ struct SettingsView: View {
                 }
 
                 // MARK: - Speech Rate
-                if ttsManager.settings.provider == .system {
+                if settings.provider == .system {
                     Section("Speech Rate") {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Image(systemName: "tortoise")
-                                Slider(value: $ttsManager.settings.speechRate, in: 0.1...0.7, step: 0.05)
+                                Slider(value: $settings.speechRate, in: 0.1...0.7, step: 0.05)
                                 Image(systemName: "hare")
                             }
                             Text(rateLabel)
@@ -161,7 +167,7 @@ struct SettingsView: View {
     // MARK: - Helpers
 
     private var providerIcon: String {
-        switch ttsManager.settings.provider {
+        switch settings.provider {
         case .groq: return "waveform.circle.fill"
         case .openai: return "brain.head.profile"
         case .system: return "ipad.and.arrow.forward"
@@ -170,22 +176,22 @@ struct SettingsView: View {
 
     private func providerDescription(_ provider: TTSProvider) -> String {
         switch provider {
-        case .groq: return "High-quality AI voices by PlayAI"
-        case .openai: return "Natural-sounding OpenAI voices"
+        case .groq: return "High-quality AI voices by Orpheus (6 voices)"
+        case .openai: return "Natural-sounding OpenAI voices (6 voices)"
         case .system: return "Built-in iOS voices (works offline)"
         }
     }
 
     private func setVoice(_ id: String) {
-        switch ttsManager.settings.provider {
-        case .groq: ttsManager.settings.groqVoice = id
-        case .openai: ttsManager.settings.openAIVoice = id
-        case .system: ttsManager.settings.systemVoice = id
+        switch settings.provider {
+        case .groq: settings.groqVoice = id
+        case .openai: settings.openAIVoice = id
+        case .system: settings.systemVoice = id
         }
     }
 
     private var rateLabel: String {
-        let rate = ttsManager.settings.speechRate
+        let rate = settings.speechRate
         if rate < 0.25 { return "Slow" }
         if rate < 0.45 { return "Normal" }
         return "Fast"

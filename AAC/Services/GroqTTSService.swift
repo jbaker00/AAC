@@ -6,42 +6,32 @@ class GroqTTSService {
     private let speechURL = URL(string: "https://api.groq.com/openai/v1/audio/speech")!
 
     static let availableVoices: [(id: String, name: String)] = [
-        ("Arista-PlayAI", "Arista (Female)"),
-        ("Atlas-PlayAI", "Atlas (Male)"),
-        ("Basil-PlayAI", "Basil (Male)"),
-        ("Briggs-PlayAI", "Briggs (Male)"),
-        ("Calista-PlayAI", "Calista (Female)"),
-        ("Celeste-PlayAI", "Celeste (Female)"),
-        ("Cheyenne-PlayAI", "Cheyenne (Female)"),
-        ("Chip-PlayAI", "Chip (Male)"),
-        ("Cillian-PlayAI", "Cillian (Male)"),
-        ("Deedee-PlayAI", "Deedee (Female)"),
-        ("Fritz-PlayAI", "Fritz (Male)"),
-        ("Gail-PlayAI", "Gail (Female)"),
-        ("Indigo-PlayAI", "Indigo (Non-Binary)"),
-        ("Mamaw-PlayAI", "Mamaw (Female)"),
-        ("Mason-PlayAI", "Mason (Male)"),
-        ("Mikail-PlayAI", "Mikail (Male)"),
-        ("Mitch-PlayAI", "Mitch (Male)"),
-        ("Quinn-PlayAI", "Quinn (Non-Binary)"),
-        ("Thunder-PlayAI", "Thunder (Male)"),
-        ("Wagner-PlayAI", "Wagner (Male)")
+        ("autumn", "Autumn (Female)"),
+        ("diana", "Diana (Female)"),
+        ("hannah", "Hannah (Female)"),
+        ("austin", "Austin (Male)"),
+        ("daniel", "Daniel (Male)"),
+        ("troy", "Troy (Male)")
     ]
 
     init(apiKey: String) {
         self.apiKey = apiKey
     }
 
-    func synthesizeSpeech(text: String, voice: String = "Arista-PlayAI") async throws -> Data {
+    /// Note: Groq Orpheus has a 200 character input limit
+    func synthesizeSpeech(text: String, voice: String = "diana") async throws -> Data {
         var request = URLRequest(url: speechURL)
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 10
+        request.timeoutInterval = 15
+
+        // Truncate to 200 chars (Groq Orpheus limit)
+        let truncatedText = String(text.prefix(200))
 
         let payload: [String: Any] = [
-            "model": "playai-tts",
-            "input": text,
+            "model": "canopylabs/orpheus-v1-english",
+            "input": truncatedText,
             "voice": voice,
             "response_format": "wav"
         ]

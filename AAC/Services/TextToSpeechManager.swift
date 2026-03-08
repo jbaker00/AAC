@@ -1,5 +1,6 @@
 import Foundation
 import AVFoundation
+import Combine
 
 // MARK: - TTS Provider Enum
 enum TTSProvider: String, CaseIterable, Codable {
@@ -55,7 +56,7 @@ class TTSSettings: ObservableObject {
     init() {
         let defaults = UserDefaults.standard
         self.provider = TTSProvider(rawValue: defaults.string(forKey: "tts_provider") ?? "") ?? .groq
-        self.groqVoice = defaults.string(forKey: "tts_groq_voice") ?? "Arista-PlayAI"
+        self.groqVoice = defaults.string(forKey: "tts_groq_voice") ?? "diana"
         self.openAIVoice = defaults.string(forKey: "tts_openai_voice") ?? "nova"
         self.systemVoice = defaults.string(forKey: "tts_system_voice") ?? (AVSpeechSynthesisVoice(language: "en-US")?.identifier ?? "")
         self.speechRate = defaults.double(forKey: "tts_speech_rate")
@@ -78,7 +79,10 @@ class TextToSpeechManager: NSObject, ObservableObject {
     @Published var currentlySpeakingId: String?
     @Published var lastError: String?
 
-    @Published var settings: TTSSettings
+    let settings: TTSSettings
+
+    // Forward settings changes to our own objectWillChange
+    private var settingsCancellable: AnyCancellable?
 
     private let synthesizer = AVSpeechSynthesizer()
     private var audioPlayer: AVAudioPlayer?
@@ -90,6 +94,14 @@ class TextToSpeechManager: NSObject, ObservableObject {
     override init() {
         self.settings = TTSSettings()
         super.init()
+
+        // Forward any change in settings to trigger our own UI update
+        settingsCancellable = settings.objectWillChange.sink { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.objectWillChange.send()
+            }
+        }
+
         synthesizer.delegate = self
         configureAudioSession()
         configureServices()
@@ -124,7 +136,11 @@ class TextToSpeechManager: NSObject, ObservableObject {
         stop()
         lastError = nil
 
-        let cacheKey = "\(settings.provider.rawValue)_\(settings.currentVoiceId)_\(text.lowercased())"
+        let provider = settings.provider
+        let voiceId = settings.currentVoiceId
+        let cacheKey = "\(provider.rawValue)_\(voiceId)_\(text.lowercased())"
+
+        print("[TTS] 🎯 Provider: \(provider.rawValue), Voice: \(voiceId), Text: \(text)")
 
         DispatchQueue.main.async {
             self.isSpeaking = true
@@ -133,11 +149,12 @@ class TextToSpeechManager: NSObject, ObservableObject {
 
         // Check cache first
         if let cachedAudio = audioCache[cacheKey] {
+            print("[TTS] 📦 Using cached audio")
             playAudioData(cachedAudio)
             return
         }
 
-        switch settings.provider {
+        switch provider {
         case .groq:
             if groqService != nil {
                 speakWithGroq(text: text, cacheKey: cacheKey)
@@ -179,18 +196,18 @@ class TextToSpeechManager: NSObject, ObservableObject {
 
     private func speakWithGroq(text: String, cacheKey: String) {
         guard let service = groqService else { return }
+        let voice = settings.groqVoice
         Task {
             do {
-                print("[TTS] 🔊 Speaking with Groq voice: \(settings.groqVoice)")
-                let audioData = try await service.synthesizeSpeech(
-                    text: text, voice: settings.groqVoice
-                )
+                print("[TTS] 🔊 Calling Groq API — voice: \(voice)")
+                let audioData = try await service.synthesizeSpeech(text: text, voice: voice)
+                print("[TTS] ✅ Groq returned \(audioData.count) bytes")
                 self.audioCache[cacheKey] = audioData
                 await MainActor.run { self.playAudioData(audioData) }
             } catch {
                 print("[TTS] ❌ Groq TTS failed: \(error)")
                 await MainActor.run {
-                    self.lastError = "Groq TTS failed: \(error.localizedDescription). Using system voice."
+                    self.lastError = "Groq: \(error.localizedDescription)"
                     self.speakNatively(text: text)
                 }
             }
@@ -199,18 +216,18 @@ class TextToSpeechManager: NSObject, ObservableObject {
 
     private func speakWithOpenAI(text: String, cacheKey: String) {
         guard let service = openAIService else { return }
+        let voice = settings.openAIVoice
         Task {
             do {
-                print("[TTS] 🔊 Speaking with OpenAI voice: \(settings.openAIVoice)")
-                let audioData = try await service.synthesizeSpeech(
-                    text: text, voice: settings.openAIVoice, speed: settings.speechRate * 2.0
-                )
+                print("[TTS] 🔊 Calling OpenAI API — voice: \(voice)")
+                let audioData = try await service.synthesizeSpeech(text: text, voice: voice, speed: 1.0)
+                print("[TTS] ✅ OpenAI returned \(audioData.count) bytes")
                 self.audioCache[cacheKey] = audioData
                 await MainActor.run { self.playAudioData(audioData) }
             } catch {
                 print("[TTS] ❌ OpenAI TTS failed: \(error)")
                 await MainActor.run {
-                    self.lastError = "OpenAI TTS failed: \(error.localizedDescription). Using system voice."
+                    self.lastError = "OpenAI: \(error.localizedDescription)"
                     self.speakNatively(text: text)
                 }
             }
@@ -224,9 +241,11 @@ class TextToSpeechManager: NSObject, ObservableObject {
             audioPlayer = try AVAudioPlayer(data: data)
             audioPlayer?.delegate = self
             audioPlayer?.play()
+            print("[TTS] ▶️ Playing audio (\(data.count) bytes)")
         } catch {
-            print("[TTS] Audio playback failed: \(error)")
+            print("[TTS] ❌ Audio playback failed: \(error)")
             DispatchQueue.main.async {
+                self.lastError = "Playback error: \(error.localizedDescription)"
                 self.isSpeaking = false
                 self.currentlySpeakingId = nil
             }
@@ -234,6 +253,7 @@ class TextToSpeechManager: NSObject, ObservableObject {
     }
 
     private func speakNatively(text: String) {
+        print("[TTS] 🔊 Using system voice")
         let utterance = AVSpeechUtterance(string: text)
         if !settings.systemVoice.isEmpty {
             utterance.voice = AVSpeechSynthesisVoice(identifier: settings.systemVoice)
