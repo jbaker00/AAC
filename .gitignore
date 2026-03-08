@@ -15,5 +15,5 @@ xcuserdata/
 .build/
 Packages/
 
-# Secrets - uncomment if you want to keep keys out of git
-# AAC/Services/Secrets.swift
+# Secrets - keep API keys out of git
+AAC/Services/Secrets.swift
