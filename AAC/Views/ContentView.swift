@@ -32,14 +32,8 @@ struct ContentView: View {
                     .padding(.top, 4)
 
                     if let error = ttsManager.lastError {
-                        HStack {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                            Text(error)
-                        }
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                        .padding(.horizontal, 32)
-                        .padding(.top, 4)
+                        // Log errors to console only, don't show on AAC screen
+                        let _ = print("[TTS UI] \(error)")
                     }
 
                     LazyVGrid(columns: columns, spacing: 24) {

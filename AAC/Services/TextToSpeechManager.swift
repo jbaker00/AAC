@@ -53,12 +53,24 @@ class TTSSettings: ObservableObject {
         return voices.first(where: { $0.id == currentVoiceId })?.name ?? currentVoiceId
     }
 
+    // Valid Groq Orpheus voices
+    private static let validGroqVoices = Set(["autumn", "diana", "hannah", "austin", "daniel", "troy"])
+
     init() {
         let defaults = UserDefaults.standard
         self.provider = TTSProvider(rawValue: defaults.string(forKey: "tts_provider") ?? "") ?? .groq
-        self.groqVoice = defaults.string(forKey: "tts_groq_voice") ?? "diana"
         self.openAIVoice = defaults.string(forKey: "tts_openai_voice") ?? "nova"
         self.systemVoice = defaults.string(forKey: "tts_system_voice") ?? (AVSpeechSynthesisVoice(language: "en-US")?.identifier ?? "")
+
+        // Migrate stale Groq voice from decommissioned PlayAI model
+        let savedGroqVoice = defaults.string(forKey: "tts_groq_voice") ?? ""
+        if Self.validGroqVoices.contains(savedGroqVoice) {
+            self.groqVoice = savedGroqVoice
+        } else {
+            self.groqVoice = "diana"
+            defaults.set("diana", forKey: "tts_groq_voice")
+        }
+
         self.speechRate = defaults.double(forKey: "tts_speech_rate")
         if self.speechRate == 0 { self.speechRate = 0.5 }
     }
