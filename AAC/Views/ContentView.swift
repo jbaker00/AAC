@@ -11,10 +11,13 @@ struct ContentView: View {
     // Image cache for custom items
     @State private var imageCache: [String: UIImage] = [:]
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 24),
-        GridItem(.flexible(), spacing: 24)
-    ]
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
+    private var columns: [GridItem] {
+        // 2 columns on iPhone, 3 on iPad
+        let count = sizeClass == .compact ? 2 : 3
+        return Array(repeating: GridItem(.flexible(), spacing: 20), count: count)
+    }
 
     var body: some View {
         NavigationStack {
@@ -50,7 +53,7 @@ struct ContentView: View {
                                         ttsManager.speak(text: item.speechText, itemId: item.id)
                                     }
                                 }
-                                .frame(minHeight: 280)
+                                .frame(minHeight: sizeClass == .compact ? 180 : 280)
 
                                 // Edit/delete overlay in edit mode
                                 if isEditing {
@@ -81,7 +84,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .padding(32)
+                    .padding(sizeClass == .compact ? 16 : 32)
                     .padding(.bottom, 80)
                 }
                 .background(Color(red: 0.96, green: 0.97, blue: 0.98))

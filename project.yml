@@ -9,7 +9,7 @@ options:
 settings:
   base:
     DEVELOPMENT_TEAM: G3P9A8Z2NP
-    TARGETED_DEVICE_FAMILY: "2"
+    TARGETED_DEVICE_FAMILY: "1,2"
     SUPPORTS_XR_DESIGNED_FOR: "NO"
     INFOPLIST_FILE: AAC/Info.plist
 
@@ -23,7 +23,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.jbaker.AAC
         INFOPLIST_FILE: AAC/Info.plist
-        TARGETED_DEVICE_FAMILY: "2"
+        TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: G3P9A8Z2NP
         SWIFT_VERSION: "5.9"
