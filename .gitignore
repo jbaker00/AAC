@@ -20,6 +20,7 @@ Secrets.plist
 AAC/Services/Secrets.swift
 AAC/Services/GeneratedSecrets.swift
 *.png
-# But allow PNG assets inside the Xcode asset catalog
+# But allow PNG assets inside the Xcode asset catalog and App Store screenshots
 !AAC/Assets.xcassets/**/*.png
+!screenshots/*.png
 Simulator Screenshot*
