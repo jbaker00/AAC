@@ -19,3 +19,5 @@ Packages/
 Secrets.plist
 AAC/Services/Secrets.swift
 AAC/Services/GeneratedSecrets.swift
+*.png
+Simulator Screenshot*
