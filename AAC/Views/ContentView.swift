@@ -14,9 +14,8 @@ struct ContentView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var columns: [GridItem] {
-        // 2 columns on iPhone, 3 on iPad
-        let count = sizeClass == .compact ? 2 : 3
-        return Array(repeating: GridItem(.flexible(), spacing: 20), count: count)
+        // 2 columns on both iPhone and iPad
+        return Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     }
 
     var body: some View {
