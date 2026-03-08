@@ -16,4 +16,6 @@ xcuserdata/
 Packages/
 
 # Secrets - keep API keys out of git
+Secrets.plist
 AAC/Services/Secrets.swift
+AAC/Services/GeneratedSecrets.swift

@@ -60,6 +60,18 @@ class ItemStore: ObservableObject {
         }
     }
 
+    func updateItem(_ updatedItem: AACItem, newImage: UIImage? = nil) {
+        guard let index = items.firstIndex(where: { $0.id == updatedItem.id }) else { return }
+        var item = updatedItem
+        if let image = newImage {
+            let imageName = "\(item.id).png"
+            saveImage(image, named: imageName)
+            item.customImageName = imageName
+        }
+        items[index] = item
+        saveItems()
+    }
+
     func moveItem(from source: IndexSet, to destination: Int) {
         items.move(fromOffsets: source, toOffset: destination)
         saveItems()

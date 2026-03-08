@@ -15,47 +15,28 @@ enum TTSProvider: String, CaseIterable, Codable {
         case .openai: return OpenAITTSService.availableVoices
         case .system: return AVSpeechSynthesisVoice.speechVoices()
                 .filter { $0.language.hasPrefix("en") }
+                .sorted { $0.name < $1.name }
                 .map { (id: $0.identifier, name: "\($0.name) (\($0.language))") }
         }
     }
 }
 
 // MARK: - TTS Settings
-class TTSSettings: ObservableObject, Codable {
-    @Published var provider: TTSProvider
-    @Published var groqVoice: String
-    @Published var openAIVoice: String
-    @Published var systemVoice: String
-    @Published var speechRate: Double
-
-    enum CodingKeys: String, CodingKey {
-        case provider, groqVoice, openAIVoice, systemVoice, speechRate
+class TTSSettings: ObservableObject {
+    @Published var provider: TTSProvider {
+        didSet { save() }
     }
-
-    init() {
-        self.provider = .groq
-        self.groqVoice = "Arista-PlayAI"
-        self.openAIVoice = "nova"
-        self.systemVoice = AVSpeechSynthesisVoice(language: "en-US")?.identifier ?? ""
-        self.speechRate = 0.5
+    @Published var groqVoice: String {
+        didSet { save() }
     }
-
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        provider = try container.decode(TTSProvider.self, forKey: .provider)
-        groqVoice = try container.decode(String.self, forKey: .groqVoice)
-        openAIVoice = try container.decode(String.self, forKey: .openAIVoice)
-        systemVoice = try container.decode(String.self, forKey: .systemVoice)
-        speechRate = try container.decode(Double.self, forKey: .speechRate)
+    @Published var openAIVoice: String {
+        didSet { save() }
     }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(provider, forKey: .provider)
-        try container.encode(groqVoice, forKey: .groqVoice)
-        try container.encode(openAIVoice, forKey: .openAIVoice)
-        try container.encode(systemVoice, forKey: .systemVoice)
-        try container.encode(speechRate, forKey: .speechRate)
+    @Published var systemVoice: String {
+        didSet { save() }
+    }
+    @Published var speechRate: Double {
+        didSet { save() }
     }
 
     var currentVoiceId: String {
@@ -66,19 +47,28 @@ class TTSSettings: ObservableObject, Codable {
         }
     }
 
-    func save() {
-        if let data = try? JSONEncoder().encode(self) {
-            UserDefaults.standard.set(data, forKey: "tts_settings")
-        }
+    var currentVoiceDisplayName: String {
+        let voices = provider.voices
+        return voices.first(where: { $0.id == currentVoiceId })?.name ?? currentVoiceId
     }
 
-    static func load() -> TTSSettings {
-        guard let data = UserDefaults.standard.data(forKey: "tts_settings"),
-              let settings = try? JSONDecoder().decode(TTSSettings.self, from: data)
-        else {
-            return TTSSettings()
-        }
-        return settings
+    init() {
+        let defaults = UserDefaults.standard
+        self.provider = TTSProvider(rawValue: defaults.string(forKey: "tts_provider") ?? "") ?? .groq
+        self.groqVoice = defaults.string(forKey: "tts_groq_voice") ?? "Arista-PlayAI"
+        self.openAIVoice = defaults.string(forKey: "tts_openai_voice") ?? "nova"
+        self.systemVoice = defaults.string(forKey: "tts_system_voice") ?? (AVSpeechSynthesisVoice(language: "en-US")?.identifier ?? "")
+        self.speechRate = defaults.double(forKey: "tts_speech_rate")
+        if self.speechRate == 0 { self.speechRate = 0.5 }
+    }
+
+    func save() {
+        let defaults = UserDefaults.standard
+        defaults.set(provider.rawValue, forKey: "tts_provider")
+        defaults.set(groqVoice, forKey: "tts_groq_voice")
+        defaults.set(openAIVoice, forKey: "tts_openai_voice")
+        defaults.set(systemVoice, forKey: "tts_system_voice")
+        defaults.set(speechRate, forKey: "tts_speech_rate")
     }
 }
 
@@ -86,20 +76,39 @@ class TTSSettings: ObservableObject, Codable {
 class TextToSpeechManager: NSObject, ObservableObject {
     @Published var isSpeaking = false
     @Published var currentlySpeakingId: String?
+    @Published var lastError: String?
+
     @Published var settings: TTSSettings
 
     private let synthesizer = AVSpeechSynthesizer()
     private var audioPlayer: AVAudioPlayer?
-    private lazy var groqService = GroqTTSService(apiKey: Secrets.groqApiKey)
-    private lazy var openAIService = OpenAITTSService(apiKey: Secrets.openAIApiKey)
+    private var groqService: GroqTTSService?
+    private var openAIService: OpenAITTSService?
 
     private var audioCache: [String: Data] = [:]
 
     override init() {
-        self.settings = TTSSettings.load()
+        self.settings = TTSSettings()
         super.init()
         synthesizer.delegate = self
         configureAudioSession()
+        configureServices()
+    }
+
+    private func configureServices() {
+        if let groqKey = Secrets.groqApiKey {
+            groqService = GroqTTSService(apiKey: groqKey)
+            print("[TTS] ✅ Groq service configured")
+        } else {
+            print("[TTS] ⚠️ No Groq API key — Groq TTS unavailable")
+        }
+
+        if let openAIKey = Secrets.openAIApiKey {
+            openAIService = OpenAITTSService(apiKey: openAIKey)
+            print("[TTS] ✅ OpenAI service configured")
+        } else {
+            print("[TTS] ⚠️ No OpenAI API key — OpenAI TTS unavailable")
+        }
     }
 
     private func configureAudioSession() {
@@ -113,6 +122,7 @@ class TextToSpeechManager: NSObject, ObservableObject {
 
     func speak(text: String, itemId: String? = nil) {
         stop()
+        lastError = nil
 
         let cacheKey = "\(settings.provider.rawValue)_\(settings.currentVoiceId)_\(text.lowercased())"
 
@@ -129,9 +139,23 @@ class TextToSpeechManager: NSObject, ObservableObject {
 
         switch settings.provider {
         case .groq:
-            speakWithGroq(text: text, cacheKey: cacheKey)
+            if groqService != nil {
+                speakWithGroq(text: text, cacheKey: cacheKey)
+            } else {
+                DispatchQueue.main.async {
+                    self.lastError = "Groq API key not configured. Check Secrets.plist."
+                }
+                speakNatively(text: text)
+            }
         case .openai:
-            speakWithOpenAI(text: text, cacheKey: cacheKey)
+            if openAIService != nil {
+                speakWithOpenAI(text: text, cacheKey: cacheKey)
+            } else {
+                DispatchQueue.main.async {
+                    self.lastError = "OpenAI API key not configured. Check Secrets.plist."
+                }
+                speakNatively(text: text)
+            }
         case .system:
             speakNatively(text: text)
         }
@@ -154,31 +178,41 @@ class TextToSpeechManager: NSObject, ObservableObject {
     // MARK: - Private TTS Methods
 
     private func speakWithGroq(text: String, cacheKey: String) {
+        guard let service = groqService else { return }
         Task {
             do {
-                let audioData = try await groqService.synthesizeSpeech(
+                print("[TTS] 🔊 Speaking with Groq voice: \(settings.groqVoice)")
+                let audioData = try await service.synthesizeSpeech(
                     text: text, voice: settings.groqVoice
                 )
                 self.audioCache[cacheKey] = audioData
                 await MainActor.run { self.playAudioData(audioData) }
             } catch {
-                print("[TTS] Groq TTS failed, falling back to system: \(error)")
-                await MainActor.run { self.speakNatively(text: text) }
+                print("[TTS] ❌ Groq TTS failed: \(error)")
+                await MainActor.run {
+                    self.lastError = "Groq TTS failed: \(error.localizedDescription). Using system voice."
+                    self.speakNatively(text: text)
+                }
             }
         }
     }
 
     private func speakWithOpenAI(text: String, cacheKey: String) {
+        guard let service = openAIService else { return }
         Task {
             do {
-                let audioData = try await openAIService.synthesizeSpeech(
+                print("[TTS] 🔊 Speaking with OpenAI voice: \(settings.openAIVoice)")
+                let audioData = try await service.synthesizeSpeech(
                     text: text, voice: settings.openAIVoice, speed: settings.speechRate * 2.0
                 )
                 self.audioCache[cacheKey] = audioData
                 await MainActor.run { self.playAudioData(audioData) }
             } catch {
-                print("[TTS] OpenAI TTS failed, falling back to system: \(error)")
-                await MainActor.run { self.speakNatively(text: text) }
+                print("[TTS] ❌ OpenAI TTS failed: \(error)")
+                await MainActor.run {
+                    self.lastError = "OpenAI TTS failed: \(error.localizedDescription). Using system voice."
+                    self.speakNatively(text: text)
+                }
             }
         }
     }

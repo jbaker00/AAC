@@ -12,12 +12,13 @@
 		1FB61D9225A624614B833DA9 /* ItemStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFE2F6FD39DBA50B08887D9 /* ItemStore.swift */; };
 		3A043210255292BCF97E61EA /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4847CA595BBC8CAC969C6A52 /* AddItemView.swift */; };
 		49C1D86F34E1C61C0A012782 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5D994507C5469DF306A8243 /* Assets.xcassets */; };
-		531390A4053B69050FE83FD6 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36CD65583F20705A27530B7C /* Secrets.swift */; };
+		5F5739FE1EF5792023D9D4E2 /* GeneratedSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4599A0980F8D1198468667C0 /* GeneratedSecrets.swift */; };
 		6C188C6D683F53D8849BCAC4 /* PottyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E49B1909ABCAB0F68E4442B /* PottyView.swift */; };
 		8033D41D3E25E2D6F4F59511 /* StrollerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26023927FBAD8B7F17577A1C /* StrollerView.swift */; };
 		8421383AD877E0EFF2764375 /* ElectricToothbrushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BEC0042A23DC53D247C5DFE /* ElectricToothbrushView.swift */; };
 		9010D539944169E7F542539F /* AACButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AB8012356B42E87A9DA366 /* AACButtonView.swift */; };
 		99024E7EE30B454AF82EC0E0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804EDA163E36AE438A8BCD47 /* SettingsView.swift */; };
+		A8149D390065AEDB22EC3ED8 /* EditItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3F035DD55BB57CA0A2E442 /* EditItemView.swift */; };
 		B43DFE3ED500AA0FC5DF8B4B /* AACItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AE8A23928CCE4F8F0E5D7C /* AACItem.swift */; };
 		B52537A552A5464CDB18090E /* MilkCartonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D6BBC85069F388F677F360 /* MilkCartonView.swift */; };
 		B5CCC2155D448846B44EF192 /* OpenAITTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B946CE7BF9D0B3CB8F6FC8 /* OpenAITTSService.swift */; };
@@ -29,11 +30,12 @@
 		24B946CE7BF9D0B3CB8F6FC8 /* OpenAITTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAITTSService.swift; sourceTree = "<group>"; };
 		26023927FBAD8B7F17577A1C /* StrollerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrollerView.swift; sourceTree = "<group>"; };
 		27FB0CEFD631FD74A607950D /* GroqTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroqTTSService.swift; sourceTree = "<group>"; };
-		36CD65583F20705A27530B7C /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		4599A0980F8D1198468667C0 /* GeneratedSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedSecrets.swift; sourceTree = "<group>"; };
 		46D6BBC85069F388F677F360 /* MilkCartonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkCartonView.swift; sourceTree = "<group>"; };
 		4847CA595BBC8CAC969C6A52 /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		4B21192417C747BD255566A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4BEC0042A23DC53D247C5DFE /* ElectricToothbrushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricToothbrushView.swift; sourceTree = "<group>"; };
+		5F3F035DD55BB57CA0A2E442 /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
 		6E49B1909ABCAB0F68E4442B /* PottyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PottyView.swift; sourceTree = "<group>"; };
 		780C4F2338E7DF7104317AC2 /* AAC.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AAC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		804EDA163E36AE438A8BCD47 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -58,9 +60,9 @@
 		518D24B0FF045E89F69BAD4B /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4599A0980F8D1198468667C0 /* GeneratedSecrets.swift */,
 				27FB0CEFD631FD74A607950D /* GroqTTSService.swift */,
 				24B946CE7BF9D0B3CB8F6FC8 /* OpenAITTSService.swift */,
-				36CD65583F20705A27530B7C /* Secrets.swift */,
 				A5A714BDC729D25B1478F52F /* TextToSpeechManager.swift */,
 			);
 			path = Services;
@@ -104,6 +106,7 @@
 				A2AB8012356B42E87A9DA366 /* AACButtonView.swift */,
 				4847CA595BBC8CAC969C6A52 /* AddItemView.swift */,
 				B6DDFFC18F5E035BBC6AC1BC /* ContentView.swift */,
+				5F3F035DD55BB57CA0A2E442 /* EditItemView.swift */,
 				804EDA163E36AE438A8BCD47 /* SettingsView.swift */,
 				F15486DFA349987B17B45EB5 /* ItemImages */,
 			);
@@ -126,6 +129,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 41F8E73DEAEC639DA298BB05 /* Build configuration list for PBXNativeTarget "AAC" */;
 			buildPhases = (
+				8AA4838AABF1D9E57E2BF391 /* Generate Secrets */,
 				4A89699CDC741FBFEF4627E4 /* Sources */,
 				6FFEA9739B365EAD52B2FB34 /* Resources */,
 			);
@@ -185,6 +189,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		8AA4838AABF1D9E57E2BF391 /* Generate Secrets */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Secrets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${SRCROOT}/scripts/generate_secrets.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4A89699CDC741FBFEF4627E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -195,13 +221,14 @@
 				B43DFE3ED500AA0FC5DF8B4B /* AACItem.swift in Sources */,
 				3A043210255292BCF97E61EA /* AddItemView.swift in Sources */,
 				0B4EC192581C7537CAA4D262 /* ContentView.swift in Sources */,
+				A8149D390065AEDB22EC3ED8 /* EditItemView.swift in Sources */,
 				8421383AD877E0EFF2764375 /* ElectricToothbrushView.swift in Sources */,
+				5F5739FE1EF5792023D9D4E2 /* GeneratedSecrets.swift in Sources */,
 				C6F66AD8BDDB9002309F9973 /* GroqTTSService.swift in Sources */,
 				1FB61D9225A624614B833DA9 /* ItemStore.swift in Sources */,
 				B52537A552A5464CDB18090E /* MilkCartonView.swift in Sources */,
 				B5CCC2155D448846B44EF192 /* OpenAITTSService.swift in Sources */,
 				6C188C6D683F53D8849BCAC4 /* PottyView.swift in Sources */,
-				531390A4053B69050FE83FD6 /* Secrets.swift in Sources */,
 				99024E7EE30B454AF82EC0E0 /* SettingsView.swift in Sources */,
 				8033D41D3E25E2D6F4F59511 /* StrollerView.swift in Sources */,
 				FAF5353CBF092752FCF31714 /* TextToSpeechManager.swift in Sources */,

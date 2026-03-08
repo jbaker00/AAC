@@ -28,3 +28,8 @@ targets:
         DEVELOPMENT_TEAM: G3P9A8Z2NP
         SWIFT_VERSION: "5.9"
         IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    preBuildScripts:
+      - name: Generate Secrets
+        script: |
+          bash "${SRCROOT}/scripts/generate_secrets.sh"
+        basedOnDependencyAnalysis: false

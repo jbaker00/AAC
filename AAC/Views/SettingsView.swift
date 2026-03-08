@@ -7,75 +7,115 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                // MARK: - Voice Provider
+                // MARK: - Current Voice Summary
                 Section {
-                    Picker("Voice Provider", selection: $ttsManager.settings.provider) {
-                        ForEach(TTSProvider.allCases, id: \.self) { provider in
-                            Text(provider.displayName).tag(provider)
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Currently Using")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text("\(ttsManager.settings.provider.displayName)")
+                                .font(.title2.bold())
+                            Text(ttsManager.settings.currentVoiceDisplayName)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
                         }
+                        Spacer()
+                        Image(systemName: providerIcon)
+                            .font(.system(size: 40))
+                            .foregroundColor(.accentColor)
                     }
-                    .pickerStyle(.segmented)
-                    .onChange(of: ttsManager.settings.provider) { _ in
-                        ttsManager.clearCache()
-                        ttsManager.settings.save()
-                    }
-                } header: {
-                    Label("Voice Provider", systemImage: "waveform")
-                        .font(.headline)
-                } footer: {
-                    switch ttsManager.settings.provider {
-                    case .groq:
-                        Text("Groq provides high-quality AI voices powered by PlayAI.")
-                    case .openai:
-                        Text("OpenAI provides natural-sounding AI voices.")
-                    case .system:
-                        Text("Uses the built-in iOS speech synthesizer. Works offline.")
+                    .padding(.vertical, 8)
+                }
+
+                // MARK: - Voice Provider
+                Section("Voice Provider") {
+                    ForEach(TTSProvider.allCases, id: \.self) { provider in
+                        Button {
+                            ttsManager.settings.provider = provider
+                            ttsManager.clearCache()
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(provider.displayName)
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                    Text(providerDescription(provider))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                if ttsManager.settings.provider == provider {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.accentColor)
+                                } else {
+                                    Image(systemName: "circle")
+                                        .font(.title2)
+                                        .foregroundColor(.gray.opacity(0.4))
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
                     }
                 }
 
                 // MARK: - Voice Selection
-                Section {
-                    voicePickerForCurrentProvider
-                } header: {
-                    Label("Voice", systemImage: "person.wave.2")
-                        .font(.headline)
+                Section("Choose Voice for \(ttsManager.settings.provider.displayName)") {
+                    let voices = ttsManager.settings.provider.voices
+                    let selectedId = ttsManager.settings.currentVoiceId
+
+                    ForEach(voices, id: \.id) { voice in
+                        Button {
+                            setVoice(voice.id)
+                            ttsManager.clearCache()
+                        } label: {
+                            HStack {
+                                Text(voice.name)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                if voice.id == selectedId {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.accentColor)
+                                }
+                            }
+                            .padding(.vertical, 2)
+                        }
+                    }
                 }
 
-                // MARK: - Speech Rate (System voice only)
+                // MARK: - Speech Rate
                 if ttsManager.settings.provider == .system {
-                    Section {
+                    Section("Speech Rate") {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Text("Speech Rate")
-                                Spacer()
-                                Text(rateLabel)
-                                    .foregroundColor(.secondary)
+                                Image(systemName: "tortoise")
+                                Slider(value: $ttsManager.settings.speechRate, in: 0.1...0.7, step: 0.05)
+                                Image(systemName: "hare")
                             }
-                            Slider(value: $ttsManager.settings.speechRate, in: 0.1...0.7, step: 0.05)
-                                .onChange(of: ttsManager.settings.speechRate) { _ in
-                                    ttsManager.settings.save()
-                                }
+                            Text(rateLabel)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .center)
                         }
-                    } header: {
-                        Label("Speed", systemImage: "gauge.with.needle")
-                            .font(.headline)
                     }
                 }
 
                 // MARK: - Preview
-                Section {
+                Section("Test Voice") {
                     Button {
                         ttsManager.speak(text: "Hello, I would like some milk please.")
                     } label: {
                         HStack {
+                            Spacer()
                             Image(systemName: ttsManager.isSpeaking ? "speaker.wave.3.fill" : "play.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.accentColor)
+                                .font(.title)
                             Text(ttsManager.isSpeaking ? "Speaking..." : "Preview Voice")
-                                .font(.title3)
+                                .font(.title3.bold())
+                            Spacer()
                         }
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 12)
+                        .foregroundColor(ttsManager.isSpeaking ? .secondary : .accentColor)
                     }
                     .disabled(ttsManager.isSpeaking)
 
@@ -84,77 +124,63 @@ struct SettingsView: View {
                             ttsManager.stop()
                         } label: {
                             HStack {
+                                Spacer()
                                 Image(systemName: "stop.circle.fill")
-                                    .font(.title2)
-                                    .foregroundColor(.red)
+                                    .font(.title)
                                 Text("Stop")
-                                    .font(.title3)
-                                    .foregroundColor(.red)
+                                    .font(.title3.bold())
+                                Spacer()
                             }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.vertical, 8)
+                            .padding(.vertical, 12)
+                            .foregroundColor(.red)
                         }
                     }
-                } header: {
-                    Label("Preview", systemImage: "speaker.wave.2.bubble")
-                        .font(.headline)
+
+                    if let error = ttsManager.lastError {
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                    }
                 }
             }
             .navigationTitle("Voice Settings")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        ttsManager.settings.save()
-                        dismiss()
-                    }
-                    .font(.headline)
+                    Button("Done") { dismiss() }
+                        .font(.headline)
                 }
             }
         }
     }
 
-    // MARK: - Voice Picker
+    // MARK: - Helpers
 
-    @ViewBuilder
-    private var voicePickerForCurrentProvider: some View {
-        let voices = ttsManager.settings.provider.voices
-
+    private var providerIcon: String {
         switch ttsManager.settings.provider {
-        case .groq:
-            Picker("Voice", selection: $ttsManager.settings.groqVoice) {
-                ForEach(voices, id: \.id) { voice in
-                    Text(voice.name).tag(voice.id)
-                }
-            }
-            .pickerStyle(.inline)
-            .onChange(of: ttsManager.settings.groqVoice) { _ in
-                ttsManager.clearCache()
-                ttsManager.settings.save()
-            }
+        case .groq: return "waveform.circle.fill"
+        case .openai: return "brain.head.profile"
+        case .system: return "ipad.and.arrow.forward"
+        }
+    }
 
-        case .openai:
-            Picker("Voice", selection: $ttsManager.settings.openAIVoice) {
-                ForEach(voices, id: \.id) { voice in
-                    Text(voice.name).tag(voice.id)
-                }
-            }
-            .pickerStyle(.inline)
-            .onChange(of: ttsManager.settings.openAIVoice) { _ in
-                ttsManager.clearCache()
-                ttsManager.settings.save()
-            }
+    private func providerDescription(_ provider: TTSProvider) -> String {
+        switch provider {
+        case .groq: return "High-quality AI voices by PlayAI"
+        case .openai: return "Natural-sounding OpenAI voices"
+        case .system: return "Built-in iOS voices (works offline)"
+        }
+    }
 
-        case .system:
-            Picker("Voice", selection: $ttsManager.settings.systemVoice) {
-                ForEach(voices, id: \.id) { voice in
-                    Text(voice.name).tag(voice.id)
-                }
-            }
-            .pickerStyle(.inline)
-            .onChange(of: ttsManager.settings.systemVoice) { _ in
-                ttsManager.settings.save()
-            }
+    private func setVoice(_ id: String) {
+        switch ttsManager.settings.provider {
+        case .groq: ttsManager.settings.groqVoice = id
+        case .openai: ttsManager.settings.openAIVoice = id
+        case .system: ttsManager.settings.systemVoice = id
         }
     }
 
