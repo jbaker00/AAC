@@ -23,4 +23,6 @@ AAC/Services/GeneratedSecrets.swift
 # But allow PNG assets inside the Xcode asset catalog and App Store screenshots
 !AAC/Assets.xcassets/**/*.png
 !screenshots/*.png
+!Screenshots/*.png
+!Screenshots/appstore/*.png
 Simulator Screenshot*
