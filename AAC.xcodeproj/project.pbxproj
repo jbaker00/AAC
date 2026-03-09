@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -37,6 +37,7 @@
 		4BEC0042A23DC53D247C5DFE /* ElectricToothbrushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricToothbrushView.swift; sourceTree = "<group>"; };
 		5F3F035DD55BB57CA0A2E442 /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
 		6E49B1909ABCAB0F68E4442B /* PottyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PottyView.swift; sourceTree = "<group>"; };
+		6ED7E1E02F5E463800720D75 /* AppStoreSubmission.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AppStoreSubmission.md; sourceTree = "<group>"; };
 		780C4F2338E7DF7104317AC2 /* AAC.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AAC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		804EDA163E36AE438A8BCD47 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8CFE2F6FD39DBA50B08887D9 /* ItemStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStore.swift; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 		71B29704DBD4B06B3BCE4642 = {
 			isa = PBXGroup;
 			children = (
+				6ED7E1E02F5E463800720D75 /* AppStoreSubmission.md */,
 				5E91785478731AB1DC3F0A45 /* AAC */,
 				1F037ED1C838B731F9B42817 /* Products */,
 			);
@@ -169,7 +171,6 @@
 			);
 			mainGroup = 71B29704DBD4B06B3BCE4642;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
