@@ -70,10 +70,7 @@ https://github.com/jbaker00/AAC
 ---
 
 ## Privacy Policy URL
-*(Required — create a simple privacy policy page. Suggested: https://jbaker00.github.io/aac-privacy or use a free generator like app-privacy-policy-generator.firebaseapp.com)*
-
-Suggested privacy policy text:
-"My Words does not collect, store, or transmit any personal data. Photos added to the app are stored locally on your device only. Voice synthesis requests sent to AI providers (Groq, OpenAI) contain only the text of the button label and are not linked to any user identity. The app does not use analytics, advertising, or tracking."
+https://jbaker00.github.io/aac-privacy.html
 
 ---
 
