@@ -6,6 +6,11 @@ options:
   xcodeVersion: "15.0"
   createIntermediateGroups: true
 
+packages:
+  GoogleMobileAds:
+    url: https://github.com/googleads/swift-package-manager-google-mobile-ads.git
+    from: 11.0.0
+
 settings:
   base:
     DEVELOPMENT_TEAM: G3P9A8Z2NP
@@ -19,6 +24,9 @@ targets:
     platform: iOS
     sources:
       - AAC
+    dependencies:
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.jbaker.AAC

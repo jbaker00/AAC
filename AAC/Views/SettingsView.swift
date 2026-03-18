@@ -12,146 +12,152 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                // MARK: - Current Voice Summary
-                Section {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Currently Using")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text(settings.provider.displayName)
-                                .font(.title2.bold())
-                            Text(settings.currentVoiceDisplayName)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                        Image(systemName: providerIcon)
-                            .font(.system(size: 40))
-                            .foregroundColor(.accentColor)
-                    }
-                    .padding(.vertical, 8)
-                }
-
-                // MARK: - Voice Provider
-                Section("Voice Provider") {
-                    ForEach(TTSProvider.allCases, id: \.self) { provider in
-                        Button {
-                            settings.provider = provider
-                            ttsManager.clearCache()
-                        } label: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(provider.displayName)
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
-                                    Text(providerDescription(provider))
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                Spacer()
-                                if settings.provider == provider {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.accentColor)
-                                } else {
-                                    Image(systemName: "circle")
-                                        .font(.title2)
-                                        .foregroundColor(.gray.opacity(0.4))
-                                }
-                            }
-                            .padding(.vertical, 4)
-                        }
-                    }
-                }
-
-                // MARK: - Voice Selection
-                Section("Choose Voice for \(settings.provider.displayName)") {
-                    let voices = settings.provider.voices
-                    let selectedId = settings.currentVoiceId
-
-                    ForEach(voices, id: \.id) { voice in
-                        Button {
-                            setVoice(voice.id)
-                            ttsManager.clearCache()
-                        } label: {
-                            HStack {
-                                Text(voice.name)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                                if voice.id == selectedId {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.accentColor)
-                                }
-                            }
-                            .padding(.vertical, 2)
-                        }
-                    }
-                }
-
-                // MARK: - Speech Rate
-                if settings.provider == .system {
-                    Section("Speech Rate") {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Image(systemName: "tortoise")
-                                Slider(value: $settings.speechRate, in: 0.1...0.7, step: 0.05)
-                                Image(systemName: "hare")
-                            }
-                            Text(rateLabel)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                        }
-                    }
-                }
-
-                // MARK: - Preview
-                Section("Test Voice") {
-                    Button {
-                        ttsManager.speak(text: "Hello, I would like some milk please.")
-                    } label: {
+            VStack(spacing: 0) {
+                Form {
+                    // MARK: - Current Voice Summary
+                    Section {
                         HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Currently Using")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text(settings.provider.displayName)
+                                    .font(.title2.bold())
+                                Text(settings.currentVoiceDisplayName)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
                             Spacer()
-                            Image(systemName: ttsManager.isSpeaking ? "speaker.wave.3.fill" : "play.circle.fill")
-                                .font(.title)
-                            Text(ttsManager.isSpeaking ? "Speaking..." : "Preview Voice")
-                                .font(.title3.bold())
-                            Spacer()
+                            Image(systemName: providerIcon)
+                                .font(.system(size: 40))
+                                .foregroundColor(.accentColor)
                         }
-                        .padding(.vertical, 12)
-                        .foregroundColor(ttsManager.isSpeaking ? .secondary : .accentColor)
+                        .padding(.vertical, 8)
                     }
-                    .disabled(ttsManager.isSpeaking)
 
-                    if ttsManager.isSpeaking {
+                    // MARK: - Voice Provider
+                    Section("Voice Provider") {
+                        ForEach(TTSProvider.allCases, id: \.self) { provider in
+                            Button {
+                                settings.provider = provider
+                                ttsManager.clearCache()
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(provider.displayName)
+                                            .font(.headline)
+                                            .foregroundColor(.primary)
+                                        Text(providerDescription(provider))
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                    if settings.provider == provider {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .font(.title2)
+                                            .foregroundColor(.accentColor)
+                                    } else {
+                                        Image(systemName: "circle")
+                                            .font(.title2)
+                                            .foregroundColor(.gray.opacity(0.4))
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                            }
+                        }
+                    }
+
+                    // MARK: - Voice Selection
+                    Section("Choose Voice for \(settings.provider.displayName)") {
+                        let voices = settings.provider.voices
+                        let selectedId = settings.currentVoiceId
+
+                        ForEach(voices, id: \.id) { voice in
+                            Button {
+                                setVoice(voice.id)
+                                ttsManager.clearCache()
+                            } label: {
+                                HStack {
+                                    Text(voice.name)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    if voice.id == selectedId {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.accentColor)
+                                    }
+                                }
+                                .padding(.vertical, 2)
+                            }
+                        }
+                    }
+
+                    // MARK: - Speech Rate
+                    if settings.provider == .system {
+                        Section("Speech Rate") {
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Image(systemName: "tortoise")
+                                    Slider(value: $settings.speechRate, in: 0.1...0.7, step: 0.05)
+                                    Image(systemName: "hare")
+                                }
+                                Text(rateLabel)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                            }
+                        }
+                    }
+
+                    // MARK: - Preview
+                    Section("Test Voice") {
                         Button {
-                            ttsManager.stop()
+                            ttsManager.speak(text: "Hello, I would like some milk please.")
                         } label: {
                             HStack {
                                 Spacer()
-                                Image(systemName: "stop.circle.fill")
+                                Image(systemName: ttsManager.isSpeaking ? "speaker.wave.3.fill" : "play.circle.fill")
                                     .font(.title)
-                                Text("Stop")
+                                Text(ttsManager.isSpeaking ? "Speaking..." : "Preview Voice")
                                     .font(.title3.bold())
                                 Spacer()
                             }
                             .padding(.vertical, 12)
-                            .foregroundColor(.red)
+                            .foregroundColor(ttsManager.isSpeaking ? .secondary : .accentColor)
                         }
-                    }
+                        .disabled(ttsManager.isSpeaking)
 
-                    if let error = ttsManager.lastError {
-                        HStack {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.orange)
-                            Text(error)
-                                .font(.caption)
-                                .foregroundColor(.orange)
+                        if ttsManager.isSpeaking {
+                            Button {
+                                ttsManager.stop()
+                            } label: {
+                                HStack {
+                                    Spacer()
+                                    Image(systemName: "stop.circle.fill")
+                                        .font(.title)
+                                    Text("Stop")
+                                        .font(.title3.bold())
+                                    Spacer()
+                                }
+                                .padding(.vertical, 12)
+                                .foregroundColor(.red)
+                            }
+                        }
+
+                        if let error = ttsManager.lastError {
+                            HStack {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                Text(error)
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                            }
                         }
                     }
                 }
+
+                // Banner ad at the bottom
+                AdBannerContainer()
+                    .background(Color(UIColor.systemBackground))
             }
             .navigationTitle("Voice Settings")
             .navigationBarTitleDisplayMode(.large)
