@@ -51,6 +51,7 @@
 		ECC78794F7BC556E1573B1AD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		ED07348C4195B5A5F321D3C8 /* StrollerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrollerView.swift; sourceTree = "<group>"; };
 		EEA47A1F01DEFFDEA0266E63 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdView.swift; sourceTree = "<group>"; };
+		"TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +139,14 @@
 				ED07348C4195B5A5F321D3C8 /* StrollerView.swift */,
 			);
 			path = ItemImages;
+			sourceTree = "<group>";
+		};
+		"TEMP_64C5BA53-A445-4842-B4CF-E95F60BB0575" /* AAC */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */,
+			);
+			path = AAC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -397,11 +406,11 @@
 		};
 		2A5679EAA7B77434AF19A684 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = "TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = G3P9A8Z2NP;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "My Words/Info.plist";
@@ -410,7 +419,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbaker.AAC;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -420,11 +428,11 @@
 		};
 		76B0CE73575CE2A88396BF46 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = "TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = G3P9A8Z2NP;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "My Words/Info.plist";
@@ -433,7 +441,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbaker.AAC;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
