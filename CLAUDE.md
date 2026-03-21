@@ -8,14 +8,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build & Development
 
-**Generate Xcode project (required after changing `project.yml`):**
+**First-time setup after cloning (run in order):**
 ```bash
+# 1. Generate GeneratedSecrets.swift from Secrets.plist (required before xcodegen)
+SRCROOT=$(pwd) bash scripts/generate_secrets.sh
+
+# 2. Generate the Xcode project
 xcodegen generate
 ```
 
-Then open `AAC.xcodeproj` in Xcode, select the "AAC" target, and run on a simulator or device.
+Then open `My Words.xcodeproj` and build.
 
-**Secrets setup:** API keys live in `Secrets.plist` (not committed). The build pre-action runs `scripts/generate_secrets.sh` which reads from `Secrets.plist` or environment variables and generates `AAC/Services/GeneratedSecrets.swift` at build time.
+**After changing `project.yml`:** re-run `xcodegen generate`.
+
+**Secrets setup:** API keys live in `Secrets.plist` (not committed). The Xcode build pre-action runs `scripts/generate_secrets.sh` which reads from `Secrets.plist` or environment variables and generates `My Words/Services/GeneratedSecrets.swift` at build time. This file is gitignored — it must exist before xcodegen runs so Xcode includes it in the project.
 
 There are no automated tests in this project.
 
