@@ -42,5 +42,21 @@ The existing `generate_secrets.sh` build phase already reads these env vars, so 
 ## Key Configuration
 
 - **`project.yml`** — XcodeGen config; defines the iOS target, deployment target, build scripts, and entitlements. Edit this (not the `.xcodeproj` directly) when changing project settings.
-- **`Secrets.plist`** — Contains `GroqAPIKey` and `OpenAIAPIKey`. Never commit this file (already in `.gitignore`).
+- **`Secrets.plist`** — Contains `GROQ_API_KEY`, `OPENAI_API_KEY`, `ADMOB_APP_ID`, and `ADMOB_BANNER_AD_UNIT_ID`. Never commit this file (already in `.gitignore`).
 - **Bundle ID:** `com.jbaker.AAC` | **Team ID:** `G3P9A8Z2NP`
+
+## Google AdMob
+
+The app shows a bottom banner ad using Google Mobile Ads SDK (added via SPM).
+
+**How it works:**
+- `ADMOB_APP_ID` is read from `Secrets.plist` (local) or env var (Xcode Cloud) by `scripts/generate_secrets.sh`, which writes it into `Info.plist` at build time.
+- `ADMOB_BANNER_AD_UNIT_ID` is generated into `AAC/Services/GeneratedSecrets.swift` and accessed via `Secrets.admobBannerAdUnitId`.
+- `AACApp.swift` calls `MobileAds.shared.start()` at launch.
+- `Views/BannerAdView.swift` renders the adaptive banner at the bottom of the screen.
+
+**Xcode Cloud:** Add these as secret environment variables in the workflow:
+- `ADMOB_APP_ID`
+- `ADMOB_BANNER_AD_UNIT_ID`
+
+**After cloning (local setup):** Add both keys to `Secrets.plist` before building.

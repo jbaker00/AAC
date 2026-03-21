@@ -58,7 +58,7 @@ class TTSSettings: ObservableObject {
 
     init() {
         let defaults = UserDefaults.standard
-        self.provider = TTSProvider(rawValue: defaults.string(forKey: "tts_provider") ?? "") ?? .groq
+        self.provider = TTSProvider(rawValue: defaults.string(forKey: "tts_provider") ?? "") ?? .system
         self.openAIVoice = defaults.string(forKey: "tts_openai_voice") ?? "nova"
         self.systemVoice = defaults.string(forKey: "tts_system_voice") ?? (AVSpeechSynthesisVoice(language: "en-US")?.identifier ?? "")
 

@@ -10,7 +10,7 @@ set -euo pipefail
 # on every upload without any manual bumping.
 
 if [ -n "${CI_BUILD_NUMBER:-}" ]; then
-    INFO_PLIST="${CI_PRIMARY_REPOSITORY_PATH}/AAC/Info.plist"
+    INFO_PLIST="${CI_PRIMARY_REPOSITORY_PATH}/My Words/Info.plist"
     echo "📦 Setting CFBundleVersion to ${CI_BUILD_NUMBER}"
     /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${CI_BUILD_NUMBER}" "$INFO_PLIST"
 else
@@ -18,12 +18,12 @@ else
 fi
 
 # ── Secrets ─────────────────────────────────────────────────────────────────
-# GROQ_API_KEY and OPENAI_API_KEY must be set as secret environment variables
-# in the Xcode Cloud workflow (Xcode → Product → Xcode Cloud → Manage Workflows
-# → Edit → Environment → Environment Variables, check "Secret").
+# The following must be set as secret environment variables in the Xcode Cloud
+# workflow (Xcode → Product → Xcode Cloud → Manage Workflows → Edit →
+# Environment → Environment Variables, check "Secret"):
+#   GROQ_API_KEY, OPENAI_API_KEY, ADMOB_APP_ID, ADMOB_BANNER_AD_UNIT_ID
 #
-# The existing generate_secrets.sh build phase reads these same env vars,
-# so no additional work is needed here — just verify they're present.
+# The generate_secrets.sh build phase reads these same env vars at compile time.
 
 echo "🔐 Checking secret environment variables..."
 
@@ -40,6 +40,28 @@ if [ -z "${OPENAI_API_KEY:-}" ]; then
     MISSING=$((MISSING + 1))
 else
     echo "   ✅ OPENAI_API_KEY present"
+fi
+
+# ── AdMob — inject App ID into Info.plist before the build reads it ──────────
+INFO_PLIST="${CI_PRIMARY_REPOSITORY_PATH}/My Words/Info.plist"
+
+if [ -n "${ADMOB_APP_ID:-}" ]; then
+    echo "   ✅ ADMOB_APP_ID present"
+    if [ -f "$INFO_PLIST" ]; then
+        /usr/libexec/PlistBuddy -c "Set :GADApplicationIdentifier ${ADMOB_APP_ID}" "$INFO_PLIST" 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c "Add :GADApplicationIdentifier string ${ADMOB_APP_ID}" "$INFO_PLIST"
+        echo "   ✅ GADApplicationIdentifier written to Info.plist"
+    fi
+else
+    echo "   ⚠️  ADMOB_APP_ID is not set — ads will not load"
+    MISSING=$((MISSING + 1))
+fi
+
+if [ -z "${ADMOB_BANNER_AD_UNIT_ID:-}" ]; then
+    echo "   ⚠️  ADMOB_BANNER_AD_UNIT_ID is not set — banner ads will not load"
+    MISSING=$((MISSING + 1))
+else
+    echo "   ✅ ADMOB_BANNER_AD_UNIT_ID present"
 fi
 
 if [ "$MISSING" -gt 0 ]; then

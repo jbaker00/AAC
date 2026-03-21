@@ -19,6 +19,7 @@ struct ContentView: View {
     }
 
     var body: some View {
+        VStack(spacing: 0) {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
@@ -160,6 +161,10 @@ struct ContentView: View {
                 refreshImageCache()
             }
         }
+        BannerAdView()
+            .frame(height: BannerAdView.height)
+            .frame(maxWidth: .infinity)
+        } // VStack
     }
 
     private func refreshImageCache() {

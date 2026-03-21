@@ -19,9 +19,13 @@ Packages/
 Secrets.plist
 AAC/Services/Secrets.swift
 AAC/Services/GeneratedSecrets.swift
+My Words/Services/Secrets.swift
+My Words/Services/GeneratedSecrets.swift
+
+# PNG images (large binaries) — allow asset catalog and screenshots
 *.png
-# But allow PNG assets inside the Xcode asset catalog and App Store screenshots
 !AAC/Assets.xcassets/**/*.png
+!My Words/Assets.xcassets/**/*.png
 !screenshots/*.png
 !Screenshots/*.png
 !Screenshots/appstore/*.png
