@@ -33,8 +33,8 @@
 		03C3B442F77A6D143E6AB270 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AF8EA07BB09BBCF6C3A1B5C /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		23AC44A801842ED61D538BD0 /* OpenAITTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAITTSService.swift; sourceTree = "<group>"; };
-		42A79D831792C27DAA8686CC /* My Words.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "My Words.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5067D563B02A1745DB1C0120 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		42A79D831792C27DAA8686CC /* My Words.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Words.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5067D563B02A1745DB1C0120 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5FDE50D2542F8727D0AD4B3C /* MilkCartonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkCartonView.swift; sourceTree = "<group>"; };
 		6174A2BA8C6255411DBC0957 /* AACApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AACApp.swift; sourceTree = "<group>"; };
 		62FDB5DD6529387A0737ABBE /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
@@ -85,6 +85,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6E32ABD52F6F0B1400CA8F44 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		86836CC48C4FF239C69FCCC2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +121,7 @@
 			children = (
 				C608A748B177ED07AB80DE0C /* My Words */,
 				632B58DEBAC98F8658AC9DB3 /* Products */,
+				6E32ABD52F6F0B1400CA8F44 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -139,14 +148,6 @@
 				ED07348C4195B5A5F321D3C8 /* StrollerView.swift */,
 			);
 			path = ItemImages;
-			sourceTree = "<group>";
-		};
-		"TEMP_64C5BA53-A445-4842-B4CF-E95F60BB0575" /* AAC */ = {
-			isa = PBXGroup;
-			children = (
-				"TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */,
-			);
-			path = AAC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,6 +420,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.91;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbaker.AAC;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -441,6 +443,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.91;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbaker.AAC;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
