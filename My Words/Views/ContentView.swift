@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseAnalytics
 
 struct ContentView: View {
     @StateObject private var ttsManager = TextToSpeechManager()
@@ -63,6 +64,9 @@ struct ContentView: View {
                                                 itemStore.deleteItem(id: item.id)
                                                 imageCache.removeValue(forKey: item.id)
                                             }
+                                            Analytics.logEvent("item_deleted", parameters: [
+                                                "item_count": itemStore.items.count
+                                            ])
                                         } label: {
                                             Image(systemName: "xmark.circle.fill")
                                                 .font(.system(size: 28))
@@ -93,6 +97,9 @@ struct ContentView: View {
                 if !isEditing {
                     Button {
                         showingAddItem = true
+                        Analytics.logEvent(AnalyticsEventScreenView, parameters: [
+                            AnalyticsParameterScreenName: "add_item",
+                        ])
                     } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "plus")
@@ -115,6 +122,11 @@ struct ContentView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
                         withAnimation { isEditing.toggle() }
+                        if isEditing {
+                            Analytics.logEvent("edit_mode_entered", parameters: [
+                                "item_count": itemStore.items.count
+                            ])
+                        }
                     } label: {
                         Text(isEditing ? "Done" : "Edit")
                             .font(.headline)
@@ -135,6 +147,9 @@ struct ContentView: View {
 
                     Button {
                         showingSettings = true
+                        Analytics.logEvent(AnalyticsEventScreenView, parameters: [
+                            AnalyticsParameterScreenName: "settings",
+                        ])
                     } label: {
                         Image(systemName: "gearshape.fill")
                             .font(.title2)

@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import FirebaseAnalytics
 
 struct AddItemView: View {
     @ObservedObject var itemStore: ItemStore
@@ -206,6 +207,11 @@ struct AddItemView: View {
             isBuiltIn: false
         )
         itemStore.addItem(newItem, image: selectedImage)
+        Analytics.logEvent("item_added", parameters: [
+            "has_image": selectedImage != nil ? 1 : 0,
+            "has_custom_speech": speechText.isEmpty ? 0 : 1,
+            "item_count": itemStore.items.count
+        ])
         dismiss()
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 import Combine
+import FirebaseAnalytics
 
 // MARK: - TTS Provider Enum
 enum TTSProvider: String, CaseIterable, Codable {
@@ -120,19 +121,9 @@ class TextToSpeechManager: NSObject, ObservableObject {
     }
 
     private func configureServices() {
-        if let groqKey = Secrets.groqApiKey {
-            groqService = GroqTTSService(apiKey: groqKey)
-            print("[TTS] ✅ Groq service configured")
-        } else {
-            print("[TTS] ⚠️ No Groq API key — Groq TTS unavailable")
-        }
-
-        if let openAIKey = Secrets.openAIApiKey {
-            openAIService = OpenAITTSService(apiKey: openAIKey)
-            print("[TTS] ✅ OpenAI service configured")
-        } else {
-            print("[TTS] ⚠️ No OpenAI API key — OpenAI TTS unavailable")
-        }
+        groqService = GroqTTSService()
+        openAIService = OpenAITTSService()
+        print("[TTS] ✅ Groq + OpenAI TTS via proxy configured")
     }
 
     private func configureAudioSession() {
@@ -154,6 +145,13 @@ class TextToSpeechManager: NSObject, ObservableObject {
 
         print("[TTS] 🎯 Provider: \(provider.rawValue), Voice: \(voiceId), Text: \(text)")
 
+        Analytics.logEvent("item_spoken", parameters: [
+            "provider": provider.rawValue,
+            "voice": voiceId,
+            "text_length": text.count,
+            "cached": audioCache[cacheKey] != nil ? 1 : 0
+        ])
+
         DispatchQueue.main.async {
             self.isSpeaking = true
             self.currentlySpeakingId = itemId
@@ -168,23 +166,9 @@ class TextToSpeechManager: NSObject, ObservableObject {
 
         switch provider {
         case .groq:
-            if groqService != nil {
-                speakWithGroq(text: text, cacheKey: cacheKey)
-            } else {
-                DispatchQueue.main.async {
-                    self.lastError = "Groq API key not configured. Check Secrets.plist."
-                }
-                speakNatively(text: text)
-            }
+            speakWithGroq(text: text, cacheKey: cacheKey)
         case .openai:
-            if openAIService != nil {
-                speakWithOpenAI(text: text, cacheKey: cacheKey)
-            } else {
-                DispatchQueue.main.async {
-                    self.lastError = "OpenAI API key not configured. Check Secrets.plist."
-                }
-                speakNatively(text: text)
-            }
+            speakWithOpenAI(text: text, cacheKey: cacheKey)
         case .system:
             speakNatively(text: text)
         }
@@ -218,8 +202,12 @@ class TextToSpeechManager: NSObject, ObservableObject {
                 await MainActor.run { self.playAudioData(audioData) }
             } catch {
                 print("[TTS] ❌ Groq TTS failed: \(error)")
+                let msg = error.localizedDescription
+                Analytics.logEvent("tts_fallback_to_computer", parameters: [
+                    "provider": "groq", "reason": String(msg.prefix(100))
+                ])
                 await MainActor.run {
-                    self.lastError = "Groq: \(error.localizedDescription)"
+                    self.lastError = "Groq: \(msg)"
                     self.speakNatively(text: text)
                 }
             }
@@ -238,8 +226,18 @@ class TextToSpeechManager: NSObject, ObservableObject {
                 await MainActor.run { self.playAudioData(audioData) }
             } catch {
                 print("[TTS] ❌ OpenAI TTS failed: \(error)")
+                let msg = error.localizedDescription
+                if msg.localizedCaseInsensitiveContains("quota") ||
+                   msg.contains("429") {
+                    Analytics.logEvent("openai_tts_quota_exceeded", parameters: [
+                        "voice": voice, "text_length": text.count
+                    ])
+                }
+                Analytics.logEvent("tts_fallback_to_computer", parameters: [
+                    "provider": "openai", "reason": String(msg.prefix(100))
+                ])
                 await MainActor.run {
-                    self.lastError = "OpenAI: \(error.localizedDescription)"
+                    self.lastError = "OpenAI: \(msg)"
                     self.speakNatively(text: text)
                 }
             }

@@ -1,9 +1,9 @@
 import Foundation
 
-/// OpenAI TTS service using the tts-1 model
+/// OpenAI TTS via the api-proxy Cloud Function (tts-1 pinned server-side).
+/// The OpenAI key lives in Firebase Secret Manager; the app ships no credentials.
 class OpenAITTSService {
-    private let apiKey: String
-    private let speechURL = URL(string: "https://api.openai.com/v1/audio/speech")!
+    private let speechURL = URL(string: "https://us-central1-jbaker-api-proxy.cloudfunctions.net/api/v1/tts")!
 
     static let availableVoices: [(id: String, name: String)] = [
         ("alloy", "Alloy (Neutral)"),
@@ -14,22 +14,26 @@ class OpenAITTSService {
         ("shimmer", "Shimmer (Soft Female)")
     ]
 
-    init(apiKey: String) {
-        self.apiKey = apiKey
+    private static var deviceId: String {
+        let key = "proxyDeviceId"
+        if let existing = UserDefaults.standard.string(forKey: key) {
+            return existing
+        }
+        let fresh = UUID().uuidString
+        UserDefaults.standard.set(fresh, forKey: key)
+        return fresh
     }
 
     func synthesizeSpeech(text: String, voice: String = "nova", speed: Double = 1.0) async throws -> Data {
         var request = URLRequest(url: speechURL)
         request.httpMethod = "POST"
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(Self.deviceId, forHTTPHeaderField: "x-device-id")
         request.timeoutInterval = 15
 
         let payload: [String: Any] = [
-            "model": "tts-1",
-            "input": text,
+            "text": text,
             "voice": voice,
-            "response_format": "mp3",
             "speed": speed
         ]
 
@@ -57,9 +61,9 @@ enum OpenAITTSError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidResponse:
-            return "Invalid response from OpenAI TTS API"
+            return "Invalid response from TTS proxy"
         case .apiError(let statusCode, let message):
-            return "OpenAI TTS API error (\(statusCode)): \(message)"
+            return "TTS proxy error (\(statusCode)): \(message)"
         }
     }
 }

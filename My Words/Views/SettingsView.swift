@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseAnalytics
 
 struct SettingsView: View {
     @ObservedObject var ttsManager: TextToSpeechManager
@@ -40,6 +41,9 @@ struct SettingsView: View {
                         Button {
                             settings.provider = provider
                             ttsManager.clearCache()
+                            Analytics.logEvent("tts_provider_changed", parameters: [
+                                "provider": provider.rawValue
+                            ])
                         } label: {
                             HStack {
                                 VStack(alignment: .leading, spacing: 2) {
@@ -188,6 +192,10 @@ struct SettingsView: View {
         case .openai: settings.openAIVoice = id
         case .system: settings.systemVoice = id
         }
+        Analytics.logEvent("tts_voice_changed", parameters: [
+            "provider": settings.provider.rawValue,
+            "voice": id
+        ])
     }
 
     private var rateLabel: String {

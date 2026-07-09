@@ -15,6 +15,8 @@
 		3E29CE4AAB649086D9A9CA18 /* ElectricToothbrushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9544DE032507CBA26563DACD /* ElectricToothbrushView.swift */; };
 		47E9011B68D70C309F4FE138 /* AACButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E075B7E6527F2965DD5E581C /* AACButtonView.swift */; };
 		67D77BC030C8D7B4A8C37B00 /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA47A1F01DEFFDEA0266E63 /* BannerAdView.swift */; };
+		68B0B2A181BCFA09798B7656 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 34C5846AC3DD526ADAA028E8 /* FirebaseAnalytics */; };
+		736DF5C32FACBB499657B52B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BD245518461B341706490C05 /* GoogleService-Info.plist */; };
 		78C4B622536F958ADBA2BBF7 /* GeneratedSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55F3E22CF9B43400FDACAE1 /* GeneratedSecrets.swift */; };
 		7D2F7FC13D7AC3CF02317274 /* AACItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D57B5F6290A383B915A636 /* AACItem.swift */; };
 		7F24AC59EC495F9D7B88A26D /* MilkCartonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDE50D2542F8727D0AD4B3C /* MilkCartonView.swift */; };
@@ -33,8 +35,8 @@
 		03C3B442F77A6D143E6AB270 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AF8EA07BB09BBCF6C3A1B5C /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		23AC44A801842ED61D538BD0 /* OpenAITTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAITTSService.swift; sourceTree = "<group>"; };
-		42A79D831792C27DAA8686CC /* My Words.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Words.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5067D563B02A1745DB1C0120 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		42A79D831792C27DAA8686CC /* My Words.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "My Words.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5067D563B02A1745DB1C0120 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5FDE50D2542F8727D0AD4B3C /* MilkCartonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkCartonView.swift; sourceTree = "<group>"; };
 		6174A2BA8C6255411DBC0957 /* AACApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AACApp.swift; sourceTree = "<group>"; };
 		62FDB5DD6529387A0737ABBE /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
@@ -43,6 +45,7 @@
 		9277782D817AFE1E96281680 /* PottyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PottyView.swift; sourceTree = "<group>"; };
 		9544DE032507CBA26563DACD /* ElectricToothbrushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricToothbrushView.swift; sourceTree = "<group>"; };
 		ABA4B0365195C9102AEDACC2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BD245518461B341706490C05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CE33130B2F6A76BC3B390406 /* ItemStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStore.swift; sourceTree = "<group>"; };
 		D55F3E22CF9B43400FDACAE1 /* GeneratedSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedSecrets.swift; sourceTree = "<group>"; };
 		E075B7E6527F2965DD5E581C /* AACButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AACButtonView.swift; sourceTree = "<group>"; };
@@ -51,7 +54,7 @@
 		ECC78794F7BC556E1573B1AD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		ED07348C4195B5A5F321D3C8 /* StrollerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrollerView.swift; sourceTree = "<group>"; };
 		EEA47A1F01DEFFDEA0266E63 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdView.swift; sourceTree = "<group>"; };
-		"TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
+		"TEMP_D1087095-F8C8-4063-9F6C-389C851A4DBF" /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F392D2CE825B5BC5BEFA365 /* GoogleMobileAds in Frameworks */,
+				68B0B2A181BCFA09798B7656 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,14 +87,6 @@
 				42A79D831792C27DAA8686CC /* My Words.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		6E32ABD52F6F0B1400CA8F44 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				"TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		86836CC48C4FF239C69FCCC2 /* Views */ = {
@@ -121,7 +117,6 @@
 			children = (
 				C608A748B177ED07AB80DE0C /* My Words */,
 				632B58DEBAC98F8658AC9DB3 /* Products */,
-				6E32ABD52F6F0B1400CA8F44 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,6 +125,7 @@
 			children = (
 				6174A2BA8C6255411DBC0957 /* AACApp.swift */,
 				03C3B442F77A6D143E6AB270 /* Assets.xcassets */,
+				BD245518461B341706490C05 /* GoogleService-Info.plist */,
 				870AE95F9AABE50B7EBC7172 /* Info.plist */,
 				5067D563B02A1745DB1C0120 /* PrivacyInfo.xcprivacy */,
 				B13F55CBF7F65125E1A7948D /* Models */,
@@ -148,6 +144,14 @@
 				ED07348C4195B5A5F321D3C8 /* StrollerView.swift */,
 			);
 			path = ItemImages;
+			sourceTree = "<group>";
+		};
+		"TEMP_210A16B1-CD5D-4409-8928-88A5D4A7F206" /* AAC */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_D1087095-F8C8-4063-9F6C-389C851A4DBF" /* Version.xcconfig */,
+			);
+			path = AAC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,6 +173,7 @@
 			name = "My Words";
 			packageProductDependencies = (
 				7EBFF5D15D4CB931A8CE62FF /* GoogleMobileAds */,
+				34C5846AC3DD526ADAA028E8 /* FirebaseAnalytics */,
 			);
 			productName = "My Words";
 			productReference = 42A79D831792C27DAA8686CC /* My Words.app */;
@@ -199,6 +204,7 @@
 			mainGroup = BAD844EB08ECF6A3E2E06764;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				DFE692ABB6FDA7F489316FBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				765E0F7FA13A4F4618C6DDCB /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -217,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9A76B8DE19BBB54AF9DC231 /* Assets.xcassets in Resources */,
+				736DF5C32FACBB499657B52B /* GoogleService-Info.plist in Resources */,
 				ED695B801BB1DCC9E5E9CCA5 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,7 +414,7 @@
 		};
 		2A5679EAA7B77434AF19A684 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */;
+			baseConfigurationReference = "TEMP_D1087095-F8C8-4063-9F6C-389C851A4DBF" /* Version.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -420,7 +427,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.91;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbaker.AAC;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -430,7 +436,7 @@
 		};
 		76B0CE73575CE2A88396BF46 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_2B112CF4-72C0-46AB-8C2C-FFA61DE740F4" /* Version.xcconfig */;
+			baseConfigurationReference = "TEMP_D1087095-F8C8-4063-9F6C-389C851A4DBF" /* Version.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -443,7 +449,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.91;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbaker.AAC;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -483,9 +488,22 @@
 				minimumVersion = 12.0.0;
 			};
 		};
+		DFE692ABB6FDA7F489316FBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		34C5846AC3DD526ADAA028E8 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DFE692ABB6FDA7F489316FBA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
 		7EBFF5D15D4CB931A8CE62FF /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 765E0F7FA13A4F4618C6DDCB /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;

@@ -10,6 +10,9 @@ packages:
   GoogleMobileAds:
     url: https://github.com/googleads/swift-package-manager-google-mobile-ads.git
     from: "12.0.0"
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    from: "11.0.0"
 
 settings:
   base:
@@ -23,6 +26,7 @@ targets:
   My Words:
     type: application
     platform: iOS
+    scheme: {}
     configFiles:
       Debug: Version.xcconfig
       Release: Version.xcconfig
@@ -31,6 +35,8 @@ targets:
     dependencies:
       - package: GoogleMobileAds
         product: GoogleMobileAds
+      - package: Firebase
+        product: FirebaseAnalytics
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.jbaker.AAC

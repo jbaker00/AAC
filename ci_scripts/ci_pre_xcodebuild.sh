@@ -18,29 +18,16 @@ else
 fi
 
 # ── Secrets ─────────────────────────────────────────────────────────────────
-# The following must be set as secret environment variables in the Xcode Cloud
-# workflow (Xcode → Product → Xcode Cloud → Manage Workflows → Edit →
-# Environment → Environment Variables, check "Secret"):
-#   GROQ_API_KEY, OPENAI_API_KEY, ADMOB_APP_ID, ADMOB_BANNER_AD_UNIT_ID
+# Groq/OpenAI TTS go through the api-proxy Cloud Function — no API keys needed.
+# Only AdMob IDs (public identifiers) must be set in the Xcode Cloud workflow
+# (Xcode → Product → Xcode Cloud → Manage Workflows → Edit → Environment):
+#   ADMOB_APP_ID, ADMOB_BANNER_AD_UNIT_ID
 #
 # The generate_secrets.sh build phase reads these same env vars at compile time.
 
-echo "🔐 Checking secret environment variables..."
+echo "🔐 Checking environment variables..."
 
 MISSING=0
-if [ -z "${GROQ_API_KEY:-}" ]; then
-    echo "   ⚠️  GROQ_API_KEY is not set — Groq TTS will be unavailable"
-    MISSING=$((MISSING + 1))
-else
-    echo "   ✅ GROQ_API_KEY present"
-fi
-
-if [ -z "${OPENAI_API_KEY:-}" ]; then
-    echo "   ⚠️  OPENAI_API_KEY is not set — OpenAI TTS will be unavailable"
-    MISSING=$((MISSING + 1))
-else
-    echo "   ✅ OPENAI_API_KEY present"
-fi
 
 # ── AdMob — inject App ID into Info.plist before the build reads it ──────────
 INFO_PLIST="${CI_PRIMARY_REPOSITORY_PATH}/My Words/Info.plist"

@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import FirebaseAnalytics
 
 struct EditItemView: View {
     @ObservedObject var itemStore: ItemStore
@@ -180,6 +181,10 @@ struct EditItemView: View {
 
         let newImage = hasNewImage ? selectedImage : nil
         itemStore.updateItem(updatedItem, newImage: newImage)
+        Analytics.logEvent("item_edited", parameters: [
+            "changed_image": hasNewImage ? 1 : 0,
+            "was_built_in": item.isBuiltIn ? 1 : 0
+        ])
         dismiss()
     }
 }
