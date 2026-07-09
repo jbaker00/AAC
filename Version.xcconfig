@@ -5,5 +5,5 @@
 // MARKETING_VERSION  = the version users see in the App Store (e.g. 1.9, 2.0)
 // CURRENT_PROJECT_VERSION = the build number (increment for every upload to App Store Connect)
 
-MARKETING_VERSION = 1.91
+MARKETING_VERSION = 1.92
 CURRENT_PROJECT_VERSION = 1
