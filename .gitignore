@@ -30,3 +30,6 @@ My Words/Services/GeneratedSecrets.swift
 !Screenshots/*.png
 !Screenshots/appstore/*.png
 Simulator Screenshot*
+
+# Firebase config
+My Words/GoogleService-Info.plist
